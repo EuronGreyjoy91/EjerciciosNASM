@@ -17,7 +17,13 @@ extern gets
 
 section .bss                     ; SECCION DE LAS VARIABLES
 
-contadorExt:
+valor:
+	resd 	1
+
+numeroPrimo:
+	resd 	1
+
+proximoValor:
 	resd 	1
 
 contadorInt:
@@ -84,6 +90,15 @@ filaStr:
 columnaStr:
 	db    " Columna:", 0	 	 ;  Cadena "Columna:"
 
+ingreseStr:
+	db    "Ingrese un numero: ", 0	 	 ;  Cadena "Columna:"
+
+xStr:
+	db    " x ", 0	 	 ;  Cadena "Columna:"
+
+igualStr:
+	db    " = ", 0	 	 ;  Cadena "Columna:"
+
 fmtChar:
         db    "%c", 0            ; FORMATO PARA CARACTERES
 
@@ -120,6 +135,27 @@ mostrarFilaStr:
 
 mostrarColumnaStr:             
         push columnaStr
+        push fmtString
+        call printf
+        add esp, 8
+        ret
+
+mostrarIngreseStr:             
+        push ingreseStr
+        push fmtString
+        call printf
+        add esp, 8
+        ret
+
+mostrarXStr:             
+        push xStr
+        push fmtString
+        call printf
+        add esp, 8
+        ret
+
+mostrarIgualStr:             
+        push igualStr
         push fmtString
         call printf
         add esp, 8
@@ -167,21 +203,60 @@ salirDelPrograma:                ; PUNTO DE SALIDA DEL PROGRAMA USANDO EXIT
 
 _start:
 main:                            				
-			mov [contadorExt], dword 2
-bucleExterno:
-			mov edi, [contadorExt]
-			mov esi, 100
-			cmp edi, esi
-			je finalizarPrograma
-			mov [contadorInt], dword 2
+			mov [numeroPrimo], dword 2
+cargarValor:
+			call mostrarIngreseStr
+			call leerNumero
+			mov al, [numero]
+			mov [valor], al ; 24
+			mov [proximoValor], al ; 24
+			call mostrarSaltoDeLinea
+mostrarInicio:
+			call mostrarNumero
+			call mostrarIgualStr
+chequeoUno:
+			mov edi, [valor]
+			cmp edi, 1
+			jne divisionPorPrimo
+			mov al, 1
+			mov [numero], al
+			call mostrarNumero
+			jmp finalizarPrograma
+divisionPorPrimo:
+			mov edx, 0
+			mov eax, [valor] 	; 24 -> 12 -> 6 -> 3 ->
+			mov ecx, [numeroPrimo]  ; 2  -> 2  -> 2 -> 2 ->  
+			div ecx
+			mov [proximoValor], eax ; 12 -> 6  -> 3 -> 1
+			cmp eax, 1 
+			je posibleFinal
+			cmp edx, 0
+			je mostrarValor
+			mov [contadorInt], dword 2 
+			inc dword [numeroPrimo]
+			jmp bucleInterno
+posibleFinal:
+			cmp edx, 0
+			je mostrarUltimoValor
+			mov [contadorInt], dword 2 
+			inc dword [numeroPrimo]
+			jmp bucleInterno
+mostrarValor:
+			mov al, [proximoValor]
+			mov [valor], al
+			mov al, [numeroPrimo] ; 2 -> 2 -> 2 ->
+			mov [numero], al 
+			call mostrarNumero
+			call mostrarXStr 
+			jmp divisionPorPrimo
 bucleInterno:
 			mov edi, [contadorInt]
-			mov esi, [contadorExt]
+			mov esi, [numeroPrimo]
 			cmp edi, esi
-			je mostrarPrimo
+			je divisionPorPrimo
 division:		
 			mov edx, 0
-			mov eax, [contadorExt]
+			mov eax, [numeroPrimo]
 			mov ecx, [contadorInt]
 			div ecx
 primerCheck:
@@ -190,14 +265,12 @@ primerCheck:
 			inc dword [contadorInt]
 			jmp bucleInterno
 noEsPrimo:
-			inc dword [contadorExt]
-			jmp bucleExterno
-mostrarPrimo:
-			mov al, [contadorExt]
+			inc dword [numeroPrimo]
+			mov [contadorInt], dword 2
+			jmp bucleInterno
+mostrarUltimoValor:
+			mov al, [numeroPrimo]
 			mov [numero], al
 			call mostrarNumero
-			call mostrarCaracter
-			inc dword [contadorExt]
-			jmp bucleExterno
 finalizarPrograma:
 			call salirDelPrograma
