@@ -207,9 +207,9 @@ main:
 cargarValor:
 			call mostrarIngreseStr
 			call leerNumero
-			mov al, [numero]
-			mov [valor], al ; 24
-			mov [proximoValor], al ; 24
+			mov eax, [numero]
+			mov [valor], eax ; 24
+			mov [proximoValor], eax ; 24
 			call mostrarSaltoDeLinea
 mostrarInicio:
 			call mostrarNumero
@@ -242,10 +242,10 @@ posibleFinal:
 			inc dword [numeroPrimo]
 			jmp bucleInterno
 mostrarValor:
-			mov al, [proximoValor]
-			mov [valor], al
-			mov al, [numeroPrimo] ; 2 -> 2 -> 2 ->
-			mov [numero], al 
+			mov eax, [proximoValor]
+			mov [valor], eax
+			mov eax, [numeroPrimo] ; 2 -> 2 -> 2 ->
+			mov [numero], eax 
 			call mostrarNumero
 			call mostrarXStr 
 			jmp divisionPorPrimo
