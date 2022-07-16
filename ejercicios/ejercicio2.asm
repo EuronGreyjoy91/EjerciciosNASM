@@ -38,6 +38,7 @@ fmtLF:
         db    0xA, 0             ; SALTO DE LINEA (LF)
 
 
+
 ; SECCION DE LAS INSTRUCCIONES
 section .text                    
 
@@ -76,31 +77,31 @@ salirDelPrograma:                ; PUNTO DE SALIDA DEL PROGRAMA USANDO EXIT
 
 _start:
 main:                                   ; PUNTO DE INICIO DEL PROGRAMA
-        call leerCadena                 ; Cargo la cadena.
-        mov edi, 0                      ; Dejo el registro EDI con el valor 0.
-        mov ebx, 1                      ; Dejo el registro EBX con el valor 1.
-        mov ecx, 0                      ; Dejo el registro ECX con el valor 0.
-        mov edx, 0                      ; Dejo el registro EDX con el valor 0.
+        call leerCadena                 
+        mov edi, 0                      
+        mov ebx, 1                      
+        mov ecx, 0                      
+        mov edx, 0                      
 seguir:
-        mov al,[edi + cadena]           ; Copia en AL el valor que esta en la posicion EDI + cadena.
-        cmp al, 0                       ; Compara AL con 0.
-        je finPrograma                  ; Si AL y 0 eran iguales, salta a fin de programa, sino sigue.
-        cmp ebx, 0                      ; Compara EBX con 0.
-        je cargarPar                    ; Si EBX era igual a 0, salta a cargarPar, sino sigue en cargarImpar.
+        mov al,[edi + cadena]          
+        cmp al, 0                       
+        je finPrograma                  
+        cmp ebx, 0                      
+        je cargarPar                    
 cargarImpar:
-        mov[ecx + cadenaImpares], al    ; Copia a la direccion de ECX + cadenaImpares, el valor de AL.
-        inc ecx                         ; Incremente ECX en 1.
-        inc edi                         ; Incrementa EDI en 1.
-        mov ebx, 0                      ; Copia en EBX el valor 0.
-        jmp seguir                      ; Salta a seguir.
+        mov[ecx + cadenaImpares], al    
+        inc ecx                         
+        inc edi                         
+        mov ebx, 0                      
+        jmp seguir                      
 cargarPar:
-        mov[edx + cadenaPares], al      ; Copia a la direccion de EDX + cadenaPares, el valor de AL.
-        inc edx                         ; Incrementa EDX en 1.
-        inc edi                         ; Incrementa EDI en 1.
-        mov ebx, 1                      ; Copia en EBX el valor 1.
-        jmp seguir                      ; Salto a seguir
+        mov[edx + cadenaPares], al      
+        inc edx                         
+        inc edi                         
+        mov ebx, 1                      
+        jmp seguir                      
 finPrograma: 
-        call mostrarCadenaPares         ; llamo a mostrar pares
-        call mostrarSaltoDeLinea        ; llamo a mostrar saldo de linea
-        call mostrarCadenaImpares       ; llamo a mostrar impares.
-        jmp salirDelPrograma            ; Salta a finalizar programa.
+        call mostrarCadenaPares         
+        call mostrarSaltoDeLinea        
+        call mostrarCadenaImpares       
+        jmp salirDelPrograma            
