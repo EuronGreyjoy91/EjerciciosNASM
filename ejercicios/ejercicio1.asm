@@ -15,7 +15,7 @@ extern gets
 
 
 
-section .bss                     ; SECCION DE LAS VARIABLES
+section .bss                     
 
 valor:
 	resd 	1
@@ -30,81 +30,37 @@ contadorInt:
 	resd 	1
 
 numero:
-        resd    1                ; 1 dword (4 bytes)
-
-aux:
-        resd    1                ; 1 dword (4 bytes)
-
-matriz:
-	resd	100		 ;  matriz como maximo de 10x10
-
-contadorFila:
-	resd 	1
-
-contadorColumna:
-	resd	1
-
-contadorDesp:
-	resd	1
-
-cantidadFilas:
-	resd	1		; fila
-
-cantidadColumnas:
-	resd	1		; columna
-
-auxDos:
-	resd	1		; columna
-
-caracter:
-        resb    1                ; 1 byte (dato)
-        resb    3                ; 3 bytes (relleno)
+        resd    1               
 
 
 
 
 
-section .data                    ; SECCION DE LAS CONSTANTES
+section .data                    
 
 fmtInt:
-        db    "%d", 0            ; FORMATO PARA NUMEROS ENTEROS
+        db    "%d", 0            
 
 fmtString:
-        db    "%s", 0            ; FORMATO PARA CADENAS
+        db    "%s", 0            
 
 fmtLF:
-        db    0xA, 0             ; SALTO DE LINEA (LF)
-
-nStr:
-	db    "N: ", 0		 		 ; Cadena "N: "
-
-valorStr:
-	db    " - Valor: ", 0		 		 
-
-mStr:
-	db    "M: ", 0		 		 ; Cadena "N: "
-
-filaStr:
-	db    "Fila:", 0	 		 ;  Cadena "Fila:"
-
-columnaStr:
-	db    " Columna:", 0	 	 ;  Cadena "Columna:"
+        db    0xA, 0            
 
 ingreseStr:
-	db    "Ingrese un numero: ", 0	 	 ;  Cadena "Columna:"
+	db    "Ingrese un numero: ", 0	 	
 
 xStr:
-	db    " x ", 0	 	 ;  Cadena "Columna:"
+	db    " x ", 0	 	 
 
 igualStr:
-	db    " = ", 0	 	 ;  Cadena "Columna:"
-
-fmtChar:
-        db    "%c", 0            ; FORMATO PARA CARACTERES
+	db    " = ", 0	 	 
 
 
 
-section .text                    ; SECCION DE LAS INSTRUCCIONES
+
+
+section .text                    
 
 leerNumero:                      
         push numero
@@ -124,20 +80,6 @@ mostrarSaltoDeLinea:
         push fmtLF
         call printf
         add esp, 4
-        ret
-
-mostrarFilaStr:             
-        push filaStr
-        push fmtString
-        call printf
-        add esp, 8
-        ret
-
-mostrarColumnaStr:             
-        push columnaStr
-        push fmtString
-        call printf
-        add esp, 8
         ret
 
 mostrarIngreseStr:             
@@ -161,43 +103,10 @@ mostrarIgualStr:
         add esp, 8
         ret
 
-mostrarValorStr:             
-        push valorStr
-        push fmtString
-        call printf
-        add esp, 8
-        ret
-
-mostrarNStr:             
-        push nStr
-        push fmtString
-        call printf
-        add esp, 8
-        ret
-
-mostrarMStr:             
-        push mStr
-        push fmtString
-        call printf
-        add esp, 8
-        ret
-
-mostrarCaracter:                 ; RUTINA PARA MOSTRAR UN CARACTER USANDO PRINTF
-        push dword [caracter]
-        push fmtChar
-        call printf
-        add esp, 8
-        ret
-
-mostrarEspacio:
-        mov eax, 32              ; Copia en EAX el valor 32 (El espacio en ASCII).
-        mov [caracter], eax      ; Copia en la direccion de [caracter] el valor de EAX.
-        call mostrarCaracter     ; Muestra un Espacio.
-        ret
-
-salirDelPrograma:                ; PUNTO DE SALIDA DEL PROGRAMA USANDO EXIT
+salirDelPrograma:                
         push 0
         call exit
+
 
 
 
@@ -208,8 +117,8 @@ cargarValor:
 			call mostrarIngreseStr
 			call leerNumero
 			mov eax, [numero]
-			mov [valor], eax ; 24
-			mov [proximoValor], eax ; 24
+			mov [valor], eax 
+			mov [proximoValor], eax
 			call mostrarSaltoDeLinea
 mostrarInicio:
 			call mostrarNumero
@@ -224,10 +133,10 @@ chequeoUno:
 			jmp finalizarPrograma
 divisionPorPrimo:
 			mov edx, 0
-			mov eax, [valor] 	; 24 -> 12 -> 6 -> 3 ->
-			mov ecx, [numeroPrimo]  ; 2  -> 2  -> 2 -> 2 ->  
+			mov eax, [valor] 	
+			mov ecx, [numeroPrimo] 
 			div ecx
-			mov [proximoValor], eax ; 12 -> 6  -> 3 -> 1
+			mov [proximoValor], eax 
 			cmp eax, 1 
 			je posibleFinal
 			cmp edx, 0
@@ -244,7 +153,7 @@ posibleFinal:
 mostrarValor:
 			mov eax, [proximoValor]
 			mov [valor], eax
-			mov eax, [numeroPrimo] ; 2 -> 2 -> 2 ->
+			mov eax, [numeroPrimo] 
 			mov [numero], eax 
 			call mostrarNumero
 			call mostrarXStr 
